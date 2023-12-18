@@ -46,9 +46,7 @@ def search_doc():
     normq = ranking.norm(ranking.rough_query_to_non_normalized_tfidf(q_vectorized))
     normalized_documents = {}
 
-    for pair in link_vector_pairs:
-        normalized_documents[pair[0]] = ranking.norm(ranking.transform_to_non_normalized_tfidf(pair[0]))
-
+    
     for link, normalized_document in normalized_documents.items():
         score = ranking.scoring(q_vectorized, normq, normalized_document, link)
         scores_dict[link] = score
@@ -307,6 +305,10 @@ button_2.place(
 # ,5)
 print("Initing Dataset...")
 link_vector_pairs = dataset.init()
+
+for pair in link_vector_pairs:
+        normalized_documents[pair[0]] = ranking.norm(ranking.transform_to_non_normalized_tfidf(pair[0]))
+
 
 window.resizable(False, False)
 window.mainloop()
