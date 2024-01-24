@@ -301,7 +301,7 @@ button_2.place(
     height=27.0
 )
 
-dataset.download_files("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" ,5)
+dataset.download_files("your github token" ,5)
 print("Initing Dataset...")
 link_vector_pairs = dataset.init()
 
