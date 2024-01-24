@@ -1,9 +1,12 @@
+import ast
 import json
 import os
 import pandas as pd
 from codeparser import parser
 from codescraper import scraper
 from utils.invertedindex import inverted_index
+
+documents = {}
 
 def add_entry_to_json_file(link, vector, filename="dataset.json"):
     """
@@ -84,8 +87,6 @@ def extract_repo_url_at_line(line_number, file_path="repos.csv"):
         return None
     
 
-
-
 def download_files(github_token, number_of_repos):
     for i in range(0, number_of_repos):
         github_url = extract_repo_url_at_line(i)
@@ -100,7 +101,10 @@ def init():
     link_vector_pairs = extract_link_vector_pairs()
 
     for pair in link_vector_pairs:
-        inverted_index.update_index(pair)
+        link, tokens_str = pair
+        tokens = ast.literal_eval(tokens_str)  # Convert the string to a list
+        inverted_index.update_index(link, tokens)
+        documents[link] = tokens
         
-    return link_vector_pairs;
+    return link_vector_pairs
 

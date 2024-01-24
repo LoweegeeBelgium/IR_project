@@ -5,14 +5,12 @@ class InvertedIndex:
         self.inverted_index = {}
         self.document_lengths = {}  # Store the length of each document for normalization
 
-    def update_index(self, document):
+    def update_index(self, link, tokens):
         """
         Update the inverted index with a single document.
 
         :param document: A tuple (link, tokens) representing the document
         """
-        link, tokens_str = document
-        tokens = ast.literal_eval(tokens_str)  # Convert the string to a list
 
         document_length = 0  # Track the length of the document for normalization
 

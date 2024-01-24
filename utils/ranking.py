@@ -4,8 +4,8 @@ import math
 from collections import Counter, OrderedDict
 from codeparser import parser
 from utils import invertedindex
+from utils import dataset
 
-#DOCUMENTATION MADE BY CHATGPT
 
 def norm(vector):
     """
@@ -91,9 +91,9 @@ def transform_to_non_normalized_tfidf(document_link):
     document_link (str): A link to the document for which the TF-IDF vector is to be computed.
 
     Returns:
-    list: A list of TF-IDF scores, one for each term in the inverted index.
+    list: A list of TF-IDF scores, one for each term in the document.
 
-    The function iterates over each token in the inverted index. For each token, it calculates:
+    The function iterates over each token in the document. For each token, it calculates:
     - Term Frequency (TF): The number of times the token appears in the document.
     - Document Frequency (DF): The number of documents in which the token appears.
     - Inverse Document Frequency (IDF): A measure of how much information the word provides.
@@ -108,9 +108,10 @@ def transform_to_non_normalized_tfidf(document_link):
     `invertedindex.inverted_index.get_document_frequency`, and `invertedindex.inverted_index.get_total_documents`
     are defined and accessible.
     """
+    
     tdfidf_vector = []
 
-    for token in invertedindex.inverted_index.inverted_index:
+    for token in dataset.documents[document_link]:
         tf = invertedindex.inverted_index.get_term_frequency(document_link, token)
         df = invertedindex.inverted_index.get_document_frequency(token)
         N = invertedindex.inverted_index.get_total_documents()
@@ -124,6 +125,8 @@ def transform_to_non_normalized_tfidf(document_link):
             tdfidf_vector.append(weighted_tf * idf)
     
     return tdfidf_vector
+    
+    
 
 def transform_to_normalized_tfidf(document_link):
     """
@@ -202,7 +205,7 @@ def rough_query_to_non_normalized_tfidf(query):
     
     return tdfidf_vector
 
-def scoring(query, normq, normalized_document, document_link):
+def scoring(query, normq, normd, document_link):
     """
     Calculate the relevance score of a document with respect to a query.
 
@@ -243,9 +246,8 @@ def scoring(query, normq, normalized_document, document_link):
             idf = 0
             
         try:
-            result += ((weighted_tfq * idf)/normq) + ((weighted_tfd * idf)/normalized_document)
+            result += ((weighted_tfq * idf)/normq) + ((weighted_tfd * idf)/normd)
         except ZeroDivisionError:
-            print("Error at link: " + document_link)
             result += 0
 
     return result

@@ -29,6 +29,7 @@ from utils import ranking
 from utils import dataset
 
 link_vector_pairs = []
+normalized_documents = {}
 
 def browse_file():
     filename = filedialog.askopenfilename(filetypes=[("Python files", "*.py")])
@@ -44,8 +45,7 @@ def search_doc():
 
     q_vectorized = parser.vectorize(query)
     normq = ranking.norm(ranking.rough_query_to_non_normalized_tfidf(q_vectorized))
-    normalized_documents = {}
-
+    
     
     for link, normalized_document in normalized_documents.items():
         score = ranking.scoring(q_vectorized, normq, normalized_document, link)
@@ -301,8 +301,7 @@ button_2.place(
     height=27.0
 )
 
-#dataset.download_files(github_token
-# ,5)
+dataset.download_files("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" ,5)
 print("Initing Dataset...")
 link_vector_pairs = dataset.init()
 
